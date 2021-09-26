@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+#ファイルを見つけるだけのやつ
+function exits() {
+  local cwd="$1"
+  local dirs=("${cwd}/lib" "${cwd}/foo")
+  for dir in "${dirs[@]}"; do
+    if [[ -d "${dir}" ]]; then
+      echo "${dir} exits"
+    else
+      echo "${dir} doesn't exits"
+    fi
+  done
+}
+
+function main() {
+  local cwd
+  cwd="$(cd "$(dirname "$0")" && pwd)"
+  exits "${cwd}"
+}
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main "$@"
+fi

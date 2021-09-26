@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+function hello() {
+  docker-compose build
+}
+
+function goodbye() {
+  docker-compose up
+}
+
+function main() {
+  hello
+  goodbye
+}
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main "$@"
+fi

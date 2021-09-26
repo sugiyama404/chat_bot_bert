@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+#ファイルを見つけるだけのやつ
+function pythonstart() {
+  local cwd="$1"
+
+  mapfile -t files < <(ls -1 "${cwd}/opt")
+  cd "${cwd}/opt"
+
+  for file_name in "${files[@]}"; do
+    python "${file_name}"
+  done
+}
+
+#ファイルを見つけるだけのやつ
+function pythonstart2() {
+  local cwd="$1"
+
+  cd "${cwd}/opt"
+
+  python "$2"
+
+}
+
+function main() {
+  local cwd
+  cwd="$(cd "$(dirname "$0")" && pwd)"
+
+  if [ $# -ge 1 ] && [ -n "$1" ]; then
+    pythonstart2 "${cwd}" "$1"
+
+  else
+    pythonstart "${cwd}"
+
+  fi
+}
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main "$@"
+fi

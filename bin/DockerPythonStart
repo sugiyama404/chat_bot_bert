@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+function start() {
+
+  cd "$1/.."
+  docker-compose exec web bash -c "/root/PythonStart '$2'"
+}
+
+function start2() {
+
+  cd "$1/.."
+  docker-compose exec web /root/PythonStart
+}
+
+function main() {
+  local cwd
+  cwd="$(cd "$(dirname "$0")" && pwd)"
+
+  if [ $# -ge 1 ] && [ -n "$1" ]; then
+    start "${cwd}" "$1"
+  else
+    start2 "${cwd}"
+  fi
+}
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main "$@"
+fi

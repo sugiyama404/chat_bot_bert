@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <title>chat room</title>
+</head>
+
+<body class="bg-dark">
+    <div class="container content">
+        <div class="card">
+            <div class="card-header">Chat</div>
+            <div class="card-body" style="overflow: scroll;height: 500px;" id="target">
+                <ul class="chat-list">
+                    {% if tasks|length < 1 %} <h4 style="text-align: center">つぶやいてみよう！！！</h4>
+                        {% else %}
+                        {% for task in tasks %}
+                        <li class="{{ task.type }}">
+                            <div class="chat-body">
+                                <div class="chat-message">
+                                    <p>{{ task.content }}</p>
+                                    {{ task.date_created.replace(microsecond = 0) }} &nbsp;&nbsp;
+                                    <a href="/delete/{{task.id}}">削除</a>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        {% endif %}
+                </ul>
+            </div>
+            {% if flag %}
+            <script>
+                $(function () {
+                    function postForm(value) {
+
+                        var form = document.createElement('form');
+                        var request = document.createElement('input');
+                        var request2 = document.createElement('input');
+                        var request3 = document.createElement('input');
+
+                        form.method = 'POST';
+                        form.action = 'http://localhost:8080/';
+                        request.type = 'hidden'; //入力フォームが表示されないように
+                        request.name = 'content';
+                        request.value = value;
+                        request2.type = 'hidden';
+                        request2.name = 'type';
+                        request2.value = 'in';
+                        request3.type = 'hidden';
+                        request3.name = 'flag';
+                        request3.value = 'False';
+                        form.appendChild(request);
+                        form.appendChild(request2);
+                        form.appendChild(request3);
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+
+                    var hostUrl = 'http://localhost:8000';
+                    var box = 'Hello, world!';
+                    var task_content = '{{ task_content }}';
+                    $.ajax({
+                        url: hostUrl,
+                        type: 'post',
+                        timeout: 30000,
+                        data: { content: task_content },
+                    }).done(function (data) {
+                        box = data.content;
+                    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest.status);
+                    });
+                    window.setTimeout(function () { postForm(box) }, 33000);
+                });
+            </script>
+            {% endif %}
+            <script>
+                $(function () {
+                    $('#target').animate({ scrollTop: $('#target')[0].scrollHeight }, 'slow');
+                });
+            </script>
+            <form action="/" method="post" class="row card-footer">
+                <div class="col-10">
+                    <input type="text" name="content" id="content" class="form-control" placeholder="write text">
+                    <input type="hidden" name="type" value="out">
+                    <input type="hidden" name="flag" value="True">
+                </div>
+                <div class="col-2">
+                    <input type="submit" value="送信" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
