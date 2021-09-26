@@ -22,8 +22,7 @@ def index():
 
 
 def reply(inp_text):
-    context = '私の名前は、タチコマです。私は公安9課に所属しています。'\
-        '思考戦車とは人工ニューロチップを用いた人工知能（AI）を搭載し、自ら「思考」し自律的に行動することができる戦車'
+    context = get_context()
 
     question = inp_text
     model = AutoModelForQuestionAnswering.from_pretrained('output/')
@@ -40,6 +39,13 @@ def reply(inp_text):
         tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
     answer = answer.replace(' ', '')
     return answer
+
+
+def get_context():
+    with open('context/me.txt') as f:
+        s = f.read()
+    s = s.replace('\n', '')
+    return s
 
 
 if __name__ == "__main__":
