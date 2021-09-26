@@ -22,8 +22,9 @@ def index():
 
 
 def reply(inp_text):
-    context = "本日お昼頃、高崎方面へ自転車で出かけました。"
-    # question="どこへ出かけた？"
+    context = '私の名前は、タチコマです。私は公安9課に所属しています。'\
+        '思考戦車とは人工ニューロチップを用いた人工知能（AI）を搭載し、自ら「思考」し自律的に行動することができる戦車'
+
     question = inp_text
     model = AutoModelForQuestionAnswering.from_pretrained('output/')
     tokenizer = BertJapaneseTokenizer.from_pretrained(
@@ -37,7 +38,7 @@ def reply(inp_text):
     answer_end = torch.argmax(output.end_logits) + 1
     answer = tokenizer.convert_tokens_to_string(
         tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
-
+    answer = answer.replace(' ', '')
     return answer
 
 
