@@ -7,6 +7,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from transformers import BertJapaneseTokenizer, AutoModelForQuestionAnswering
 import random
+import numpy as np
 
 
 app = Flask(__name__)
@@ -16,17 +17,15 @@ CORS(app, support_credentials=True)
 @app.route('/', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def index():
-    empty_flag = True
     inp_text = request.form['content']
     rep_text = reply(inp_text)
     doc = txt_to_list()
     if rep_text != '':
         rep = transform_charactor(rep_text)
         doc.insert(0, rep)
-        empty_flag = False
 
     mg_txt = inp_text + rep_text
-    rep_text = similar_document_search(mg_txt, doc, empty_flag)
+    rep_text = similar_document_search(mg_txt, doc)
     print("input:", inp_text)
     print("reply:", rep_text)
 
@@ -53,12 +52,12 @@ def reply(inp_text):
     return answer
 
 
-def similar_document_search(cand, refs, empty_flag):
+def similar_document_search(cand, refs):
 
     def calc_bert_score(cands, refs):
         from bert_score import score
 
-        Precision, Recall, F1 = score(cands, refs, lang="ja", verbose=False)
+        _, _, F1 = score(cands, refs, lang="ja", verbose=False)
         return F1.numpy().tolist()
 
     cands = []
@@ -90,13 +89,28 @@ def similar_document_search(cand, refs, empty_flag):
 
     str = ''
     if (len(data2) >= 2):
-        num = random.randrange(len(data2))
+        dice = len(data2)
+        prob = change_prob(data2)
+        print(prob)
+        num = np.random.choice(a=dice, p=prob)
         str = data2[num][1]
-
     else:
         str = data2[0][1]
-
     return str
+
+
+def change_prob(data):
+    prob = []
+    for item in data:
+        prob.append(item[0])
+    leng = len(prob)
+    prob[0] = prob[0] * leng * 0.5
+    m = nn.Softmax(dim=1)
+    input = torch.tensor(prob)
+    input = torch.reshape(input, (1, leng))
+    output = m(input)
+    x_numpy = output.to('cpu').detach().numpy().copy()
+    return x_numpy.reshape(leng,)
 
 
 def get_context():

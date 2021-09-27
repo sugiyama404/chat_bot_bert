@@ -64,12 +64,12 @@
                     }
 
                     var hostUrl = 'http://localhost:8000';
-                    var box = 'もう一回聞いて!';
+                    var box = 'もう一回言って!';
                     var task_content = '{{ task_content }}';
                     $.ajax({
                         url: hostUrl,
                         type: 'post',
-                        timeout: 90000,
+                        timeout: 150000,
                         data: { content: task_content },
                     }).done(function (data) {
                         box = data.content;
