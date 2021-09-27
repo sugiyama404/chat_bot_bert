@@ -22,11 +22,11 @@ def index():
     doc = txt_to_list()
     if rep_text != '':
         rep = transform_charactor(rep_text)
-        doc = doc.insert(0, rep)
+        doc.insert(0, rep)
         empty_flag = False
 
     mg_txt = inp_text + rep_text
-    rep_text = similar_document_search(doc, mg_txt, empty_flag)
+    rep_text = similar_document_search(mg_txt, doc, empty_flag)
     print("input:", inp_text)
     print("reply:", rep_text)
 

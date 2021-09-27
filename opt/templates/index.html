@@ -69,14 +69,14 @@
                     $.ajax({
                         url: hostUrl,
                         type: 'post',
-                        timeout: 30000,
+                        timeout: 60000,
                         data: { content: task_content },
                     }).done(function (data) {
                         box = data.content;
                     }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
                         alert(XMLHttpRequest.status);
                     });
-                    window.setTimeout(function () { postForm(box) }, 33000);
+                    window.setTimeout(function () { postForm(box) }, 63000);
                 });
             </script>
             {% endif %}
