@@ -11,3 +11,4 @@ tokenizers
 sacremoses
 pyyaml
 transformers
+bert-score
