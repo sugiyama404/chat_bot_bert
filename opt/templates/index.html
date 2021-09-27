@@ -64,19 +64,18 @@
                     }
 
                     var hostUrl = 'http://localhost:8000';
-                    var box = 'Hello, world!';
+                    var box = 'もう一回聞いて!';
                     var task_content = '{{ task_content }}';
                     $.ajax({
                         url: hostUrl,
                         type: 'post',
-                        timeout: 60000,
+                        timeout: 90000,
                         data: { content: task_content },
                     }).done(function (data) {
                         box = data.content;
-                    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert(XMLHttpRequest.status);
+                    }).always(function (msg) {
+                        postForm(box)
                     });
-                    window.setTimeout(function () { postForm(box) }, 63000);
                 });
             </script>
             {% endif %}

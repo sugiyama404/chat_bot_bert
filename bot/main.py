@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from transformers import BertJapaneseTokenizer, AutoModelForQuestionAnswering
 import random
-from bert_score import score
+import logging
 
 
 app = Flask(__name__)
@@ -126,4 +126,5 @@ def txt_to_list():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(filename='log/error.log', level=logging.DEBUG)
     app.run(debug=True, host='0.0.0.0', port=8000)
