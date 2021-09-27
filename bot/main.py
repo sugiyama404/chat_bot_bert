@@ -88,9 +88,6 @@ def similar_document_search(cand, refs, empty_flag):
         data2.append([it, it2])
         counter += 1
 
-    # if (not empty_flag) and (len(data2) >= 2):
-    #    data2.pop(0)
-
     str = ''
     if (len(data2) >= 2):
         num = random.randrange(len(data2))
