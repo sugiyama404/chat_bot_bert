@@ -1,3 +1,4 @@
+from typing import Counter
 from flask import Flask, request, jsonify, Response
 from flask_cors import CORS, cross_origin
 import json
@@ -6,7 +7,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 from transformers import BertJapaneseTokenizer, AutoModelForQuestionAnswering
 import random
-import logging
 
 
 app = Flask(__name__)
@@ -72,10 +72,11 @@ def similar_document_search(cand, refs, empty_flag):
     data.sort(reverse=True)
 
     f_flag = True
+    counter = 0
     f_num = 0.0
     data2 = []
     for it, it2 in data:
-        if f_num > it:
+        if (f_num > it) or (counter > 5):
             break
 
         if f_flag:
@@ -83,10 +84,12 @@ def similar_document_search(cand, refs, empty_flag):
             f_num = f_num - 0.05
             f_flag = False
 
+        print(it, ' ', it2)
         data2.append([it, it2])
+        counter += 1
 
-    if (not empty_flag) and (len(data2) >= 2):
-        data2.pop(0)
+    # if (not empty_flag) and (len(data2) >= 2):
+    #    data2.pop(0)
 
     str = ''
     if (len(data2) >= 2):
@@ -126,5 +129,4 @@ def txt_to_list():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(filename='log/error.log', level=logging.DEBUG)
     app.run(debug=True, host='0.0.0.0', port=8000)
