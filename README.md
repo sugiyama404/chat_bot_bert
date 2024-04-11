@@ -65,7 +65,7 @@ BERTは、様々な自然言語処理タスクに適用することができま�
 
 技術詳細はQiitaに記載しています。
 
-https://qiita.com/sugiyama404/items/7691d7ff6a5b8c24eddf
+[自然言語処理(BERT)を用いたチャットボット](https://qiita.com/sugiyama404/items/7691d7ff6a5b8c24eddf)
 
 
 [^1]: 'BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding', Jacob Devlin Ming-Wei Chang Kenton Lee Kristina Toutanova, (2019), Google AI Language
